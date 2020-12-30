@@ -1,3 +1,8 @@
+## Requirements
+
+- ffmpeg
+- `pip install python-ffmpeg-video-streaming`
+
 ## Steps
 1. Execute `python -m http.server` under project directory
 2. Execute `python stream.py`
