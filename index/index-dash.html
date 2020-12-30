@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dashjs/3.2.0/dash.all.min.js"></script>
+<script type="text/javascript">
+	function setupVideo() {
+		//var url = "https://dash.akamaized.net/envivio/EnvivioDash3/manifest.mpd";
+		var url = '../dash/dash.mpd'
+		var player = dashjs.MediaPlayer().create();
+        player.initialize(document.querySelector("#videoplayer"), url, true)
+	}
+</script>
+<style>
+	video {
+		width: 80%;
+	 	height: 80%;
+	}
+</style>
+<body onload="setupVideo()">
+<html>
+	<head><title>Adaptive Streaming in HTML5</title></head>
+	<body>
+	<h1>Adaptive Streaming with HTML5</h1>
+	<video id="videoplayer" controls></video>
+	</body>
+</html>
