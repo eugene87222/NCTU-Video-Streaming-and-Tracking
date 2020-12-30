@@ -13,6 +13,9 @@ def dash(*res):
 
 def hls(*res):
     os.makedirs('hls', exist_ok=True)
+    files = [f for f in os.listdir('hls')]
+    for f in files:
+        os.remove(os.path.join('hls', f))
     hls = video.hls(Formats.h264(), hls_list_size=10, hls_time=5)
     hls.flags('delete_segments')
     hls.representations(*res)
