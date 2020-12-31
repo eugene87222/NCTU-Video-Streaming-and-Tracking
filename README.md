@@ -1,3 +1,8 @@
+## Environment
+
+- Ubuntu 18.04 or newer
+- Python 3.7.5+
+
 ## Requirements
 
 - ffmpeg
@@ -10,4 +15,4 @@
 
 ## Ref.
 
-- https://video.aminyazdanpanah.com/python/start?r=hls
+- https://video.aminyazdanpanah.com/python/start
