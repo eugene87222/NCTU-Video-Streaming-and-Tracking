@@ -21,6 +21,8 @@ def dash(*res):
 def hls(*res):
     clean_and_mkdir('hls')
     hls = video.hls(Formats.h264(), hls_list_size=10, hls_time=5)
+    # hls = video.hls(Formats.hevc(), hls_list_size=10, hls_time=5)
+    # hls = video.hls(Formats.vp9(), hls_list_size=10, hls_time=5)
     hls.flags('delete_segments')
     hls.representations(*res)
     hls.output('./hls/hls.m3u8')
@@ -28,8 +30,7 @@ def hls(*res):
 
 if __name__ == '__main__':
     # video = ffmpeg_streaming.input('/dev/video10', capture=True)
-    # video = ffmpeg_streaming.input('HP HD Camera', capture=True)
-    video = ffmpeg_streaming.input('http://192.168.137.150:4747/video')
+    video = ffmpeg_streaming.input('HP HD Camera', capture=True)
     # video = ffmpeg_streaming.input('MOT16-05-14fps.mp4')
 
     _144p  = Representation(Size(256, 144), Bitrate(95*1024, 64*1024))
@@ -41,6 +42,5 @@ if __name__ == '__main__':
     _2k    = Representation(Size(2560, 1440), Bitrate(6144*1024, 320*1024))
     _4k    = Representation(Size(3840, 2160), Bitrate(17408*1024, 320*1024))
 
-
-    hls(_144p, _360p, _720p)
+    hls(_360p)
     # dash(_144p, _360p, _720p)
