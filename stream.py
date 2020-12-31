@@ -4,18 +4,22 @@ import ffmpeg_streaming
 from ffmpeg_streaming import Formats, Bitrate, Representation, Size
 
 
+def clean_and_mkdir(dirname):
+    os.makedirs(dirname, exist_ok=True)
+    files = [f for f in os.listdir(dirname)]
+    for f in files:
+        os.remove(os.path.join(dirname, f))
+
+
 def dash(*res):
-    os.makedirs('dash', exist_ok=True)
+    clean_and_mkdir('dash')
     dash = video.dash(Formats.h264())
     dash.representations(*res)
     dash.output('./dash/dash.mpd')
 
 
 def hls(*res):
-    os.makedirs('hls', exist_ok=True)
-    files = [f for f in os.listdir('hls')]
-    for f in files:
-        os.remove(os.path.join('hls', f))
+    clean_and_mkdir('hls')
     hls = video.hls(Formats.h264(), hls_list_size=10, hls_time=5)
     hls.flags('delete_segments')
     hls.representations(*res)
@@ -23,7 +27,8 @@ def hls(*res):
 
 
 if __name__ == '__main__':
-    video = ffmpeg_streaming.input('/dev/video10', capture=True)
+    # video = ffmpeg_streaming.input('/dev/video10', capture=True)
+    video = ffmpeg_streaming.input('HP HD Camera', capture=True)
 
     _144p  = Representation(Size(256, 144), Bitrate(95 * 1024, 64 * 1024))
     _240p  = Representation(Size(426, 240), Bitrate(150 * 1024, 94 * 1024))
@@ -35,4 +40,5 @@ if __name__ == '__main__':
     _4k    = Representation(Size(3840, 2160), Bitrate(17408 * 1024, 320 * 1024))
 
 
-    hls(_360p, _720p)
+    hls(_144p, _360p, _720p)
+    # dash(_144p, _360p, _720p)
