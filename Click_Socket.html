@@ -1,6 +1,5 @@
 <html>
 <body>
-    <input type="button" value="send" onclick="send('test')">
     <video src="test.mp4" id="videoplayer" controls></video>
 </body>
 
@@ -16,13 +15,13 @@
     };
     var videoElement = document.getElementById("videoplayer");
     var viewportOffset = videoElement.getBoundingClientRect();
-    var top_shift = viewportOffset.top
-    var left_shift = viewportOffset.left
+    var top_shift = viewportOffset.top;
+    var left_shift = viewportOffset.left;
     var test_func = function(event){
-        console.log('in');
         event.preventDefault();
-        console.log("Mouse-X: " + (event.clientX + window.pageXOffset - left_shift));
-        console.log("Mouse-Y: " + (event.clientY + window.pageYOffset - top_shift));
+        var click_X = event.clientX + window.pageXOffset - left_shift;
+        var click_Y = event.clientY + window.pageYOffset - top_shift;
+        send(click_X + ',' + click_Y);
     };
     if (videoElement) {
         videoElement.addEventListener('click',test_func);
