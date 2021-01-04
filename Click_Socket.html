@@ -15,11 +15,14 @@
         ws.send(msg);
     };
     var videoElement = document.getElementById("videoplayer");
+    var viewportOffset = videoElement.getBoundingClientRect();
+    var top_shift = viewportOffset.top
+    var left_shift = viewportOffset.left
     var test_func = function(event){
         console.log('in');
         event.preventDefault();
-        console.log("Mouse-X: " + (event.clientX + window.pageXOffset));
-        console.log("Mouse-Y: " + (event.clientY + window.pageYOffset));
+        console.log("Mouse-X: " + (event.clientX + window.pageXOffset - left_shift));
+        console.log("Mouse-Y: " + (event.clientY + window.pageYOffset - top_shift));
     };
     if (videoElement) {
         videoElement.addEventListener('click',test_func);
