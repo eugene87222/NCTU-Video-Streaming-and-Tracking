@@ -1,0 +1,27 @@
+<html>
+<body>
+    <input type="button" value="send" onclick="send('test')">
+    <video src="test.mp4" id="videoplayer" controls></video>
+</body>
+
+</html>
+
+<script type="text/javascript">
+    var ws = new WebSocket("ws://127.0.0.1:1234");
+    ws.onopen = function() {
+        console.log("Connected")
+    };
+    function send(msg) {
+        ws.send(msg);
+    };
+    var videoElement = document.getElementById("videoplayer");
+    var test_func = function(event){
+        console.log('in');
+        event.preventDefault();
+        console.log("Mouse-X: " + (event.clientX + window.pageXOffset));
+        console.log("Mouse-Y: " + (event.clientY + window.pageYOffset));
+    };
+    if (videoElement) {
+        videoElement.addEventListener('click',test_func);
+    };
+</script>
