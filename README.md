@@ -14,7 +14,7 @@
 3. Execute `python stream.py`
 4. Open `http://localhost:8000/index/index-hls.html` in the browser
 
-## WebSocket
+## WebSocket + Click Position
 1. Execute `python websocket.py` under project directory
 2. Execute `python -m http.server`
 3. Open `http://localhost:8000/Click_Socket.html`
