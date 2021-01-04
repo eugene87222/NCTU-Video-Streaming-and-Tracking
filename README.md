@@ -9,17 +9,21 @@
 - `pip install -r requirements.txt`
 
 ## Steps
-1. Execute `python -m http.server` under project directory
-2. Execute `python server.py`
-3. Execute `python stream.py`
-4. Open `http://localhost:8000/index/index-hls.html` in the browser
+1. Go to project directory
+2. Execute `python -m http.server`
+3. Execute `python server.py`
+4. Execute `python websocket.py`
+5. Execute `python stream.py`
+6. Open `http://localhost:8000/index-hls.html`
 
 ## WebSocket + Click Position
-1. Execute `python websocket.py` under project directory
-2. Execute `python -m http.server`
-3. Open `http://localhost:8000/Click_Socket.html`
+1. Go to project directory
+2. Execute `python websocket.py`
+3. Execute `python -m http.server`
+4. Open `http://localhost:8000/Click_Socket.html`
 
-## Ref.
+## Reference
 
-- https://video.aminyazdanpanah.com/python/start
-- https://towardsdatascience.com/video-streaming-in-web-browsers-with-opencv-flask-93a38846fe00
+- UI: https://freshman.tech/custom-html5-video/
+- HLS streaming: https://video.aminyazdanpanah.com/python/start
+- Flask server: https://towardsdatascience.com/video-streaming-in-web-browsers-with-opencv-flask-93a38846fe00
