@@ -91,18 +91,18 @@
   <script src="script/index.js"></script>
   <script>
     // streaming ===============================================================
-    var video = document.getElementById('video');
+    var videoTag = document.getElementById('video');
     var videoSrc = '../hls/hls.m3u8';
 
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    if (videoTag.canPlayType('application/vnd.apple.mpegurl')) {
       // First check for native browser HLS support
-      video.src = videoSrc;
+      videoTag.src = videoSrc;
     }
     else if (Hls.isSupported()) {
       // If no native HLS support, check if hls.js is supported
       var hls = new Hls();
       hls.loadSource(videoSrc);
-      hls.attachMedia(video);
+      hls.attachMedia(videoTag);
     }
   </script>
 
