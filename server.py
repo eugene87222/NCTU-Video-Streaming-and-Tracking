@@ -79,7 +79,8 @@ def data():
     x, y, h, w = coor.split(',')
     x, y = rescale(x, y, h, w)
     trk_id = select_track(x, y, target_cid, tracks)
-    print(f'Click: {trk_id} @ #frame {tracker.frame_count}')
+    print(f'Click @ {x}/{width}, {y}/{height}')
+    print(f'target: {trk_id} @ #frame {tracker.frame_count}')
     return json.dumps({'success': True}), 200, {'ContentType':'application/json'} 
 
 
@@ -113,7 +114,7 @@ if __name__ == '__main__':
                         help='IoU thresshold for non-maximum suppression.')
 
     parser.add_argument('--yolo_input_size', type=int,
-                        default=512)
+                        default=480)
 
     parser.add_argument('--quiet', action='store_true',
                         default=False)

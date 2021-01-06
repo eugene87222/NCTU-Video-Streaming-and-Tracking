@@ -165,7 +165,6 @@ function getClickCoordinate(event) {
     x = x < 0 ? 0 : x;
     y = y < 0 ? 0 : y;
     sendMessage(x+','+y+','+height+','+width);
-    // $.get('http://localhost:5000/data', {coor: x+','+y+','+height+','+width});
     event.preventDefault();
 }
 video.addEventListener('click', getClickCoordinate);
