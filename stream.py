@@ -23,13 +23,14 @@ def hls(*res):
     hls_dir = 'hls'
     clean_and_mkdir(hls_dir)
     codec_options = {
-        'bf': 10,
-        'g': 5,
-        'keyint_min': 5,
-        'sc_threshold': 50,
-        'b_strategy': 1
+        # 'bf': 10,
+        'g': 10,
+        'keyint_min': 10,
+        'sc_threshold': 40,
+        # 'b_strategy': 1,
     }
-    hls = video.hls(Formats.h264(video='libx264', audio='aac', **codec_options), hls_list_size=50, hls_time=1)
+    # hls = video.hls(Formats.h264(video='libx264', audio='aac', **codec_options), hls_list_size=50, hls_time=1)
+    hls = video.hls(Formats.h264(video='libx264', audio='aac', **codec_options), hls_time=1)
     hls.flags('delete_segments')
     hls.representations(*res)
     hls.output(os.path.join(hls_dir, 'hls.m3u8'))

@@ -6,7 +6,18 @@
 ## Requirements
 
 - ffmpeg
+- PyTorch 1.7+
 - `pip install -r requirements.txt`
+
+### Download YOLOv3 pretrained weight
+
+```
+mkdir yolo_weights
+wget -P yolo_weights https://pjreddie.com/media/files/yolov3.weights
+wget -P yolo_weights https://raw.githubusercontent.com/pjreddie/darknet/master/cfg/yolov3.cfg
+wget -P yolo_weights https://raw.githubusercontent.com/pjreddie/darknet/master/data/coco.names
+wget -P yolo_weights https://raw.githubusercontent.com/adipandas/multi-object-tracker/master/examples/pretrained_models/yolo_weights/coco_names.json
+```
 
 ## Steps
 1. Go to project directory
@@ -15,12 +26,6 @@
 4. Execute `python websocket.py`
 5. Execute `python stream.py`
 6. Open `http://localhost:8000/index-hls.html`
-
-## WebSocket + Click Position
-1. Go to project directory
-2. Execute `python websocket.py`
-3. Execute `python -m http.server`
-4. Open `http://localhost:8000/Click_Socket.html`
 
 ## Reference
 

@@ -14,8 +14,19 @@ from trackers import CentroidTracker, CentroidKF_Tracker, SORT, IOUTracker
 app = Flask(__name__, template_folder='./')
 
 camera = cv.VideoCapture('/dev/video10', cv.CAP_V4L)
+camera.set(cv.CAP_PROP_BUFFERSIZE, 2)
+# camera.set(cv.CAP_PROP_FPS, 25)
+
 height = camera.get(cv.CAP_PROP_FRAME_HEIGHT)
 width  = camera.get(cv.CAP_PROP_FRAME_WIDTH)
+rescale_size = 800
+if height > width:
+    width = rescale_size / height * width
+    height = 800
+else:
+    height = rescale_size / width * height
+    width = 800
+
 fps = camera.get(cv.CAP_PROP_FPS)
 
 model, tracker = None, None
@@ -67,6 +78,7 @@ def video_feed():
 
 
 def rescale(x, y, h, w):
+    
     x = int(x) / int(w) * width
     y = int(y) / int(h) * height
     return int(x), int(y)
@@ -114,24 +126,15 @@ if __name__ == '__main__':
                         help='IoU thresshold for non-maximum suppression.')
 
     parser.add_argument('--yolo_input_size', type=int,
-                        default=480)
-
-    parser.add_argument('--quiet', action='store_true',
-                        default=False)
+                        default=512)
 
     args = parser.parse_args()
-    print(json.dumps(vars(args), indent=2))
+    # print(json.dumps(vars(args), indent=2))
 
-    if args.quiet:
-        logging.basicConfig(
-            format='%(levelname)s, %(asctime)s, %(funcName)s, %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S',
-            level=logging.INFO)
-    else:
-        logging.basicConfig(
-            format='%(levelname)s, %(asctime)s, %(funcName)s, %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S',
-            level=logging.DEBUG)
+    logging.basicConfig(
+        format='%(levelname)s, %(asctime)s, %(funcName)s, %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        level=logging.DEBUG)
 
     if args.tracker.lower() == 'centroidtracker':
         tracker = CentroidTracker(

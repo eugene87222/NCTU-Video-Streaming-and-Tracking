@@ -1,4 +1,5 @@
 flask
+numpy
+websockets
 opencv-python
 python-ffmpeg-video-streaming
-websockets

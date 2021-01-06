@@ -55,7 +55,8 @@ function updateVideoInfo() {
     progressBar.setAttribute('max', videoDuration);
     const time = formatTime(videoDuration);
     duration.innerText = `${time.minutes}:${time.seconds}`;
-    duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`)
+    duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
+    video.playbackRate = 0.85;
 }
 video.addEventListener('loadedmetadata', updateVideoInfo);
 // Progress bar END
@@ -72,9 +73,12 @@ function updateProgress() {
     progressBar.value = Math.round(video.currentTime);
 }
 
-video.addEventListener('timeupdate', updateVideoInfo);
-video.addEventListener('timeupdate', updateTimeElapsed);
-video.addEventListener('timeupdate', updateProgress);
+setInterval(updateVideoInfo, 200);
+setInterval(updateTimeElapsed, 200);
+setInterval(updateProgress, 200);
+// video.addEventListener('timeupdate', updateVideoInfo);
+// video.addEventListener('timeupdate', updateTimeElapsed);
+// video.addEventListener('timeupdate', updateProgress);
 // Update function END
 
 const seekTooltip = document.getElementById('seek-tooltip');
