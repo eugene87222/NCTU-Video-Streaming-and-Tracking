@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Demo</title>
-  <link rel="stylesheet" href="css/style.css" type="text/css">
+  <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 
 <body>
@@ -86,23 +86,21 @@
       </symbol>
     </defs>
   </svg>
-
+               
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-  <script src="script/index.js"></script>
+  <script src="index.js"></script>
   <script>
     // streaming ===============================================================
     var videoTag = document.getElementById('video');
-    var videoSrc = '../hls/hls.m3u8';
-
-    if (videoTag.canPlayType('application/vnd.apple.mpegurl')) {
-      // First check for native browser HLS support
-      videoTag.src = videoSrc;
-    }
-    else if (Hls.isSupported()) {
-      // If no native HLS support, check if hls.js is supported
+    var videoSrc = 'hls/hls.m3u8';
+    if (Hls.isSupported()) {
       var hls = new Hls();
       hls.loadSource(videoSrc);
       hls.attachMedia(videoTag);
+    }
+    else if (videoTag.canPlayType('application/vnd.apple.mpegurl')) {
+      videoTag.src = videoSrc;
     }
   </script>
 

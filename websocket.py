@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import asyncio
+import requests
 import websockets
 
 
@@ -8,6 +9,7 @@ async def chat(websocket, path):
     await websocket.send(json.dumps({'type': 'handshake'}))
     async for message in websocket:
         print(message)
+        requests.get(f'http://127.0.0.1:5000/data?coor={message}')
 
 
 if __name__ == '__main__':

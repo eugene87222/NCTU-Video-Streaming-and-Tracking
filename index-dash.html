@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Demo</title>
-  <link rel="stylesheet" href="css/style.css" type="text/css">
+  <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 
 <body onload="setupVideo()">
@@ -88,10 +88,10 @@
   </svg>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dashjs/3.2.0/dash.all.min.js"></script>
-  <script src="script/index.js"></script>
+  <script src="index.js"></script>
   <script>
     function setupVideo() {
-      var url = '../dash/dash.mpd'
+      var url = 'dash/dash.mpd'
       var player = dashjs.MediaPlayer().create();
       player.initialize(document.querySelector("#video"), url, true)
     }

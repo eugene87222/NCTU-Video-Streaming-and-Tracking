@@ -62,17 +62,18 @@ video.addEventListener('loadedmetadata', updateVideoInfo);
 
 // Update function BEGIN
 function updateTimeElapsed() {
-    updateVideoInfo();
     const time = formatTime(Math.round(video.currentTime));
     timeElapsed.innerText = `${time.minutes}:${time.seconds}`;
     timeElapsed.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`)
 }
-video.addEventListener('timeupdate', updateTimeElapsed);
 
 function updateProgress() {
-    seek.value = Math.floor(video.currentTime);
-    progressBar.value = Math.floor(video.currentTime);
+    seek.value = Math.round(video.currentTime);
+    progressBar.value = Math.round(video.currentTime);
 }
+
+video.addEventListener('timeupdate', updateVideoInfo);
+video.addEventListener('timeupdate', updateTimeElapsed);
 video.addEventListener('timeupdate', updateProgress);
 // Update function END
 
@@ -156,12 +157,15 @@ function sendMessage(msg) {
 function getClickCoordinate(event) {
     var x = event.clientX + window.pageXOffset - videoContainer.offsetLeft;
     var y = event.clientY + window.pageYOffset - videoContainer.offsetTop;
+    var height = video.offsetHeight;
+    var width = video.offsetWidth;
     // const videoBoundingBox = video.getBoundingClientRect();
     // var x = event.clientX + window.pageXOffset - Math.round(videoBoundingBox.left);
     // var y = event.clientY + window.pageYOffset - Math.round(videoBoundingBox.top);
     x = x < 0 ? 0 : x;
     y = y < 0 ? 0 : y;
-    sendMessage(x + ',' + y);
+    sendMessage(x+','+y+','+height+','+width);
+    // $.get('http://localhost:5000/data', {coor: x+','+y+','+height+','+width});
     event.preventDefault();
 }
 video.addEventListener('click', getClickCoordinate);
