@@ -179,6 +179,25 @@ button:hover::before {
   display: inline-block;
 }
 
+#deselect-button {
+  color: #000;
+  background-color: #fff;
+  font-size: 1em;
+  font-family: "YouTube Noto", Roboto, Arial, Helvetica, sans-serif;
+  margin-left: 15px;
+  border-radius: 5px;
+  height: 110%;
+  width: 90%;
+}
+
+#deselect-button:hover {
+  background-color:rgba(255, 255, 255, 0.7);
+}
+
+#deselect-button:active {
+  background-color:rgba(255, 255, 255, 0.5);
+}
+
 input[type="range"] {
   -webkit-appearance: none;
   -moz-appearance: none;

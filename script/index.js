@@ -73,9 +73,9 @@ function updateProgress() {
     progressBar.value = Math.round(video.currentTime);
 }
 
-setInterval(updateVideoInfo, 200);
-setInterval(updateTimeElapsed, 200);
-setInterval(updateProgress, 200);
+setInterval(updateVideoInfo, 500);
+setInterval(updateTimeElapsed, 500);
+setInterval(updateProgress, 500);
 // video.addEventListener('timeupdate', updateVideoInfo);
 // video.addEventListener('timeupdate', updateTimeElapsed);
 // video.addEventListener('timeupdate', updateProgress);
@@ -121,11 +121,11 @@ function updateVolumeIcon() {
         icon.classList.add('hidden');
     });
     
-    volumeButton.setAttribute('data-title', 'Mute (m)')
+    volumeButton.setAttribute('data-title', 'Mute')
     
     if (video.muted || video.volume === 0) {
         volumeMute.classList.remove('hidden');
-        volumeButton.setAttribute('data-title', 'Unmute (m)')
+        volumeButton.setAttribute('data-title', 'Unmute')
     } else if (video.volume > 0 && video.volume <= 0.5) {
         volumeLow.classList.remove('hidden');
     } else {
@@ -147,7 +147,7 @@ volumeButton.addEventListener('click', toggleMute);
 // Volume control END
 // UI END
 
-// Connect to WebSocket server
+// WebSocket server START
 var ws = new WebSocket('ws://127.0.0.1:3333');
 ws.onopen = function () {
     console.log('Connected to ws server');
@@ -156,8 +156,17 @@ ws.onopen = function () {
 function sendMessage(msg) {
     ws.send(msg);
 };
+// WebSocket server END
 
-// Click event
+// Deselect START
+const deselectButton = document.getElementById('deselect-button');
+function deselect() {
+    ws.send('deselect');
+}
+deselectButton.addEventListener('click', deselect);
+// Deselect END
+
+// Click event START
 function getClickCoordinate(event) {
     var x = event.clientX + window.pageXOffset - videoContainer.offsetLeft;
     var y = event.clientY + window.pageYOffset - videoContainer.offsetTop;
@@ -172,3 +181,4 @@ function getClickCoordinate(event) {
     event.preventDefault();
 }
 video.addEventListener('click', getClickCoordinate);
+// Click event END
