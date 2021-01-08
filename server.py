@@ -22,10 +22,10 @@ width  = camera.get(cv.CAP_PROP_FRAME_WIDTH)
 rescale_size = 800
 if height > width:
     width = rescale_size / height * width
-    height = 800
+    height = rescale_size
 else:
     height = rescale_size / width * height
-    width = 800
+    width = rescale_size
 
 fps = camera.get(cv.CAP_PROP_FPS)
 
