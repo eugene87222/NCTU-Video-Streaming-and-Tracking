@@ -15,7 +15,6 @@ app = Flask(__name__, template_folder='./')
 
 camera = cv.VideoCapture('/dev/video10', cv.CAP_V4L)
 camera.set(cv.CAP_PROP_BUFFERSIZE, 2)
-# camera.set(cv.CAP_PROP_FPS, 25)
 
 height = camera.get(cv.CAP_PROP_FRAME_HEIGHT)
 width  = camera.get(cv.CAP_PROP_FRAME_WIDTH)
