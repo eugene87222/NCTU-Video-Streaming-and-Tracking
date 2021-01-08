@@ -78,7 +78,6 @@ def video_feed():
 
 
 def rescale(x, y, h, w):
-    
     x = int(x) / int(w) * width
     y = int(y) / int(h) * height
     return int(x), int(y)
