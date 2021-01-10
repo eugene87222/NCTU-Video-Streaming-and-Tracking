@@ -29,6 +29,8 @@ wget -P yolo_weights https://raw.githubusercontent.com/adipandas/multi-object-tr
 
 ## Reference
 
-- UI: https://freshman.tech/custom-html5-video/
+- UI design:
+  - https://freshman.tech/custom-html5-video/
+  - https://www.w3schools.com/css/css_dropdowns.asp
 - HLS streaming: https://video.aminyazdanpanah.com/python/start
 - Flask server: https://towardsdatascience.com/video-streaming-in-web-browsers-with-opencv-flask-93a38846fe00

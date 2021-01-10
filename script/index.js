@@ -38,11 +38,20 @@ video.addEventListener('pause', updatePlayButton);
 const timeElapsed = document.getElementById('time-elapsed');
 const duration = document.getElementById('duration');
 function formatTime(timeInSeconds) {
-    const result = new Date(timeInSeconds * 1000).toISOString().substr(11, 8);
-    return {
-        minutes: result.substr(3, 2),
-        seconds: result.substr(6, 2),
-    };
+    try {
+        const result = new Date(timeInSeconds * 1000).toISOString().substr(11, 8);
+        return {
+            minutes: result.substr(3, 2),
+            seconds: result.substr(6, 2),
+        };
+    }
+    catch (e) {
+        console.log('wrong time format');
+        return {
+            minutes: 'nan',
+            seconds: 'nan',
+        };
+    }
 };
 // Duration/Time elapsed END
 
@@ -73,12 +82,14 @@ function updateProgress() {
     progressBar.value = Math.round(video.currentTime);
 }
 
-setInterval(updateVideoInfo, 500);
-setInterval(updateTimeElapsed, 500);
-setInterval(updateProgress, 500);
-// video.addEventListener('timeupdate', updateVideoInfo);
-// video.addEventListener('timeupdate', updateTimeElapsed);
-// video.addEventListener('timeupdate', updateProgress);
+function updateEverything() {
+    updateVideoInfo();
+    updateTimeElapsed();
+    updateProgress();
+}
+
+setInterval(updateEverything, 500);
+// video.addEventListener('timeupdate', updateEverything);
 // Update function END
 
 const seekTooltip = document.getElementById('seek-tooltip');
@@ -120,9 +131,9 @@ function updateVolumeIcon() {
     volumeIcons.forEach(icon => {
         icon.classList.add('hidden');
     });
-    
+
     volumeButton.setAttribute('data-title', 'Mute')
-    
+
     if (video.muted || video.volume === 0) {
         volumeMute.classList.remove('hidden');
         volumeButton.setAttribute('data-title', 'Unmute')
@@ -177,7 +188,7 @@ function getClickCoordinate(event) {
     // var y = event.clientY + window.pageYOffset - Math.round(videoBoundingBox.top);
     x = x < 0 ? 0 : x;
     y = y < 0 ? 0 : y;
-    sendMessage(x+','+y+','+height+','+width);
+    sendMessage(x + ',' + y + ',' + height + ',' + width);
     event.preventDefault();
 }
 video.addEventListener('click', getClickCoordinate);

@@ -51,11 +51,21 @@
               <span> / </span>
               <time id="duration">00:00</time>
             </div>
+          </div>
+
+          <div class="right-controls">
 
             <div class="deselect">
               <button data-title="Deselect" class="deselect-button" id="deselect-button">
                 Deselect
               </button>
+            </div>
+
+            <div class="dropdown">
+              <button class="dropdown-button" id="dropdown-button" data-title="Quality">auto</button>
+              <div class="dropdown-content" id="dropdown-content">
+                <div level-idx="-1" onclick="setLevel(this)">auto</div>
+              </div>
             </div>
           </div>
         </div>
@@ -92,7 +102,7 @@
       </symbol>
     </defs>
   </svg>
-               
+
   <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script src="script/index.js"></script>
@@ -100,14 +110,42 @@
     // streaming ===============================================================
     var videoTag = document.getElementById('video');
     var videoSrc = 'hls/hls.m3u8';
+    var hls = new Hls();
+
+    function setLevel(elem) {
+      try {
+        hls.currentLevel = parseInt(elem.getAttribute('level-idx'));
+        var dropdownButton = document.getElementById('dropdown-button');
+        dropdownButton.innerHTML = elem.innerHTML;
+      }
+      catch (e) {
+        console.log(e);
+        console.log(`cannot load level #${elem.getAttribute('level-idx')}`);
+      }
+    }
+
+    function createDropdownMenu() {
+      var dropdown = document.getElementById('dropdown-content');
+      hls.levels.forEach(function (item, index) {
+        var node = document.createElement('div');
+        node.innerHTML = `${item.height}p`;
+        node.setAttribute('level-idx', index);
+        node.setAttribute('onclick', 'setLevel(this)');
+        dropdown.appendChild(node);
+      });
+      console.log('Dropdown menu created');
+    }
+
     if (Hls.isSupported()) {
-      var hls = new Hls();
       hls.loadSource(videoSrc);
       hls.attachMedia(videoTag);
+      hls.on(Hls.Events.MANIFEST_LOADED, createDropdownMenu);
     }
     else if (videoTag.canPlayType('application/vnd.apple.mpegurl')) {
       videoTag.src = videoSrc;
     }
+
+    setInterval(function() {console.log(hls.currentLevel);}, 1000);
   </script>
 
 </body>
