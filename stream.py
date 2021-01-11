@@ -3,6 +3,8 @@ import os
 import ffmpeg_streaming
 from ffmpeg_streaming import Formats, Bitrate, Representation, Size
 
+from const import *
+
 
 def clean_and_mkdir(dirname):
     os.makedirs(dirname, exist_ok=True)
@@ -15,9 +17,7 @@ def hls(*res):
     hls_dir = 'hls'
     clean_and_mkdir(hls_dir)
     codec_options = {
-        'g': 10,
-        # 'keyint_min': 10,
-        # 'sc_threshold': 40,
+        'g': 10
     }
     hls = video.hls(Formats.h264(video='libx264', audio='aac', **codec_options), hls_time=1)
     # hls.flags('delete_segments')
@@ -26,7 +26,7 @@ def hls(*res):
 
 
 if __name__ == '__main__':
-    video = ffmpeg_streaming.input('http://localhost:5000/video_feed')
+    video = ffmpeg_streaming.input(f'http://localhost:{FLASK_PORT}/video_feed')
 
     _144p  = Representation(Size(256, 144), Bitrate(95*1024, 64*1024))
     _240p  = Representation(Size(426, 240), Bitrate(150*1024, 94*1024))

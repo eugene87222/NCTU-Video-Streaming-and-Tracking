@@ -7,6 +7,7 @@ import argparse
 import cv2 as cv
 from flask import Flask, Response, request
 
+from const import *
 from detectors import Detector
 from utils import Timer, draw_tracks, select_track
 from trackers import CentroidTracker, CentroidKF_Tracker, SORT, IOUTracker
@@ -15,6 +16,7 @@ app = Flask(__name__, template_folder='./')
 
 camera = cv.VideoCapture('/dev/video10', cv.CAP_V4L)
 camera.set(cv.CAP_PROP_BUFFERSIZE, 2)
+fps = camera.get(cv.CAP_PROP_FPS)
 
 height = camera.get(cv.CAP_PROP_FRAME_HEIGHT)
 width  = camera.get(cv.CAP_PROP_FRAME_WIDTH)
@@ -26,16 +28,9 @@ else:
     height = rescale_size / width * height
     width = rescale_size
 
-fps = camera.get(cv.CAP_PROP_FPS)
-
 model, tracker = None, None
-
 tracks, trk_id = None, None
-# target_cid = [0]
-# target_cid = [0, 2]
-# target_cid = [1, 2, 3, 5, 7]
 target_cid = None
-
 timer = Timer()
 
 
@@ -78,8 +73,7 @@ def capture():
         else:
             camera.release()
             break
-        # yield (b'--frame\r\n'
-        #        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n'
                b'Content-Length: ' + f'{len(frame)}'.encode() + b'\r\n'
@@ -184,4 +178,4 @@ if __name__ == '__main__':
         nms_thres=args.nms_thres
     )
 
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='0.0.0.0', port=FLASK_PORT, debug=True)
