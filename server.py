@@ -39,6 +39,21 @@ target_cid = None
 timer = Timer()
 
 
+def rescale(x, y, h, w):
+    x = int(x) / int(w) * width
+    y = int(y) / int(h) * height
+    return int(x), int(y)
+
+
+def shutdown_server():
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
+    print('Release camera')
+    camera.release()
+
+
 def capture():
     global tracks
     while True:
@@ -76,12 +91,6 @@ def video_feed():
     return Response(capture(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-def rescale(x, y, h, w):
-    x = int(x) / int(w) * width
-    y = int(y) / int(h) * height
-    return int(x), int(y)
-
-
 @app.route('/data')
 def data():
     global tracks, trk_id
@@ -96,6 +105,12 @@ def data():
         print(f'Click @ {x}/{width}, {y}/{height}')
         print(f'target: {trk_id} @ #frame {tracker.frame_count}')
     return json.dumps({'success': True}), 200, {'ContentType':'application/json'} 
+
+    
+@app.route('/shutdown', methods=['GET'])
+def shutdown():
+    shutdown_server()
+    return 'Flask server shutting down...'
 
 
 if __name__ == '__main__':
@@ -131,7 +146,6 @@ if __name__ == '__main__':
                         default=512)
 
     args = parser.parse_args()
-    # print(json.dumps(vars(args), indent=2))
 
     logging.basicConfig(
         format='%(levelname)s, %(asctime)s, %(funcName)s, %(message)s',
