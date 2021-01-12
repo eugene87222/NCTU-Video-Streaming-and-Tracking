@@ -13,19 +13,8 @@ from trackers import CentroidTracker, CentroidKF_Tracker, SORT, IOUTracker
 
 app = Flask(__name__, template_folder='./')
 
-camera = cv.VideoCapture('/dev/video10', cv.CAP_V4L)
-camera.set(cv.CAP_PROP_BUFFERSIZE, 2)
-fps = camera.get(cv.CAP_PROP_FPS)
-
-height = camera.get(cv.CAP_PROP_FRAME_HEIGHT)
-width  = camera.get(cv.CAP_PROP_FRAME_WIDTH)
-rescale_size = 800
-if height > width:
-    width = rescale_size / height * width
-    height = rescale_size
-else:
-    height = rescale_size / width * height
-    width = rescale_size
+camera, fps = None, None
+height, weight = None, None
 
 model, tracker = None, None
 tracks, trk_id = None, None
@@ -117,7 +106,9 @@ def shutdown():
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Object detections in input video using YOLOv3 trained on COCO dataset')
 
-    parser.add_argument('--video', '-v', type=str, help='Input video path')
+    parser.add_argument('--camera', '-c', type=str,
+                        required=True,
+                        help='Input source')
 
     parser.add_argument('--model', type=str,
                         default='yolo_weights/yolov3.cfg',
@@ -175,6 +166,23 @@ if __name__ == '__main__':
             min_detection_confidence=0.4)
     else:
         raise NotImplementedError
+
+    if args.camera.startswith('/'):
+        camera = cv.VideoCapture(args.camera, cv.CAP_V4L)
+    else:
+        camera = cv.VideoCapture(args.camera)
+    camera.set(cv.CAP_PROP_BUFFERSIZE, 2)
+    fps = camera.get(cv.CAP_PROP_FPS)
+
+    height = camera.get(cv.CAP_PROP_FRAME_HEIGHT)
+    width  = camera.get(cv.CAP_PROP_FRAME_WIDTH)
+    rescale_size = 800
+    if height > width:
+        width = rescale_size / height * width
+        height = rescale_size
+    else:
+        height = rescale_size / width * height
+        width = rescale_size
 
     model = Detector(
         model=args.model,

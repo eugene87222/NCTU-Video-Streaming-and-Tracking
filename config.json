@@ -1,5 +1,5 @@
 {
-    "flask_port": "<port>",
-    "http_port":"<port>",
-    "server_ip": "<ip>"
+    "flask_port": "16034",
+    "http_port":"6034",
+    "server_ip": "140.113.203.50"
 }
