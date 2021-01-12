@@ -139,7 +139,9 @@ cpts
 # dev ipython notebook
 dev.ipynb
 
+# custom
 hls/*
 dash/*
 yolo_weights/*
 .vscode/*
+config.json
