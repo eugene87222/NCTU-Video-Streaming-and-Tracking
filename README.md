@@ -25,7 +25,7 @@ wget -P yolo_weights https://raw.githubusercontent.com/adipandas/multi-object-tr
 2. Execute `python http_server`
 3. Execute `python server.py`
 4. Execute `python stream.py`
-5. Open `http://<server_ip>:<http_port>/index.html` (`http_port` is defined in `config.json`).
+5. Open `http://<server_ip>:<http_port>/index.html` (`<server_ip>` and `http_port` are defined in `config.json`).
 
 ## Reference
 
