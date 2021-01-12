@@ -20,14 +20,12 @@ wget -P yolo_weights https://raw.githubusercontent.com/adipandas/multi-object-tr
 ```
 
 ## Steps
+
 1. Go to project directory
 2. Execute `python http_server`
-3. Execute `python websocket.py`
-4. Execute `python server.py`
-5. Execute `python stream.py`
-6. Open `http://localhost:<HTTP_PORT>/index.html` (`HTTP_PORT` is defined in `const.py`).
-
-To shutdown Flask server, go to `http://localhost:<FLASK_PORT>/shutdown` (`FLASK_PORT` is defined in `const.py`).
+3. Execute `python server.py`
+4. Execute `python stream.py`
+5. Open `http://<server_ip>:<http_port>/index.html` (`http_port` is defined in `config.json`).
 
 ## Reference
 

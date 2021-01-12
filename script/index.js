@@ -158,21 +158,31 @@ volumeButton.addEventListener('click', toggleMute);
 // Volume control END
 // UI END
 
-// WebSocket server START
-var ws = new WebSocket('ws://127.0.0.1:3333');
-ws.onopen = function () {
-    console.log('Connected to ws server');
-};
+var server_ip, flask_port;
+$.getJSON('config.json', function (json) {
+    server_ip = json.server_ip;
+    flask_port = json.flask_port;
+});
 
-function sendMessage(msg) {
-    ws.send(msg);
-};
-// WebSocket server END
+function sendRequest(method, url) {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open(method, url);
+    xmlHttp.send(null);
+    return xmlHttp.responseText;
+}
+
+// Shutdown START
+const shutdownButton = document.getElementById('shutdown-button');
+function shutdown() {
+    sendRequest('GET', `http://${server_ip}:${flask_port}/shutdown`);
+}
+shutdownButton.addEventListener('click', shutdown);
+// Shutdown END
 
 // Deselect START
 const deselectButton = document.getElementById('deselect-button');
 function deselect() {
-    ws.send('deselect');
+    sendRequest('GET', `http://${server_ip}:${flask_port}/data?coor=deselect`);
 }
 deselectButton.addEventListener('click', deselect);
 // Deselect END
@@ -183,12 +193,9 @@ function getClickCoordinate(event) {
     var y = event.clientY + window.pageYOffset - videoContainer.offsetTop;
     var height = video.offsetHeight;
     var width = video.offsetWidth;
-    // const videoBoundingBox = video.getBoundingClientRect();
-    // var x = event.clientX + window.pageXOffset - Math.round(videoBoundingBox.left);
-    // var y = event.clientY + window.pageYOffset - Math.round(videoBoundingBox.top);
     x = x < 0 ? 0 : x;
     y = y < 0 ? 0 : y;
-    sendMessage(x + ',' + y + ',' + height + ',' + width);
+    sendRequest('GET', `http://${server_ip}:${flask_port}/data?coor=`+x+','+y+','+height+','+width);
     event.preventDefault();
 }
 video.addEventListener('click', getClickCoordinate);

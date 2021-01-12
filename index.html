@@ -13,7 +13,7 @@
   <div class="container">
     <div class="video-container" id="video-container">
 
-      <video controls class="video" id="video" preload="metadata">
+      <video controls class="video" id="video" preload="metadata" autoplay>
         <!-- <source src="MOT16-05-14fps.mp4" type="video/mp4">
         </source> -->
       </video>
@@ -54,9 +54,14 @@
           </div>
 
           <div class="right-controls">
+            <div class="shutdown">
+              <button data-title="Shutdown Flask server" class="normal-button" id="shutdown-button">
+                Shutdown
+              </button>
+            </div>
 
             <div class="deselect">
-              <button data-title="Deselect" class="deselect-button" id="deselect-button">
+              <button data-title="Deselect object" class="normal-button" id="deselect-button">
                 Deselect
               </button>
             </div>
@@ -145,7 +150,7 @@
       videoTag.src = videoSrc;
     }
 
-    setInterval(function() {console.log(hls.currentLevel);}, 1000);
+    setInterval(function () { console.log('Current level: '+hls.currentLevel); }, 1000);
   </script>
 
 </body>

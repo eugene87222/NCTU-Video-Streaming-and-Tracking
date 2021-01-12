@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
-from const import *
+import json
 
 if __name__ == '__main__':
-    os.system(f'python -m http.server {HTTP_PORT}')
+    config = json.load(open('config.json', 'r'))
+    os.system(f'python -m http.server {config["http_port"]}')

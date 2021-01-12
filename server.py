@@ -5,9 +5,8 @@ import time
 import logging
 import argparse
 import cv2 as cv
-from flask import Flask, Response, request
+from flask import Flask, Response, request, render_template, send_from_directory
 
-from const import *
 from detectors import Detector
 from utils import Timer, draw_tracks, select_track
 from trackers import CentroidTracker, CentroidKF_Tracker, SORT, IOUTracker
@@ -67,6 +66,8 @@ def capture():
                     (1, 30), cv.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), thickness=2)
             cv.putText(updated_image, f'FPS (tracker): {(1/duration):.2f}',
                     (1, 45), cv.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), thickness=2)
+            cv.putText(updated_image, f'Selected object ID: {trk_id}',
+                    (1, 60), cv.FONT_HERSHEY_PLAIN, 1, (0, 0, 255), thickness=2)
 
             ret, jpeg = cv.imencode('.jpg', updated_image)
             frame =  jpeg.tobytes()
@@ -78,6 +79,12 @@ def capture():
                b'Content-Type: image/jpeg\r\n'
                b'Content-Length: ' + f'{len(frame)}'.encode() + b'\r\n'
                b'\r\n' + frame + b'\r\n')
+
+
+@app.after_request
+def add_header(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
 
 
 @app.route('/video_feed')
@@ -100,7 +107,7 @@ def data():
         print(f'target: {trk_id} @ #frame {tracker.frame_count}')
     return json.dumps({'success': True}), 200, {'ContentType':'application/json'} 
 
-    
+
 @app.route('/shutdown', methods=['GET'])
 def shutdown():
     shutdown_server()
@@ -178,4 +185,5 @@ if __name__ == '__main__':
         nms_thres=args.nms_thres
     )
 
-    app.run(host='0.0.0.0', port=FLASK_PORT, debug=True)
+    config = json.load(open('config.json', 'r'))
+    app.run(host='0.0.0.0', port=config['flask_port'], debug=True)

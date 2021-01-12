@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
+import json
 import ffmpeg_streaming
 from ffmpeg_streaming import Formats, Bitrate, Representation, Size
-
-from const import *
 
 
 def clean_and_mkdir(dirname):
@@ -20,13 +19,13 @@ def hls(*res):
         'g': 10
     }
     hls = video.hls(Formats.h264(video='libx264', audio='aac', **codec_options), hls_time=1)
-    # hls.flags('delete_segments')
     hls.representations(*res)
     hls.output(os.path.join(hls_dir, 'hls.m3u8'))
 
 
 if __name__ == '__main__':
-    video = ffmpeg_streaming.input(f'http://localhost:{FLASK_PORT}/video_feed')
+    config = json.load(open('config.json', 'r'))
+    video = ffmpeg_streaming.input(f'http://localhost:{config["flask_port"]}/video_feed')
 
     _144p  = Representation(Size(256, 144), Bitrate(95*1024, 64*1024))
     _240p  = Representation(Size(426, 240), Bitrate(150*1024, 94*1024))
@@ -37,4 +36,4 @@ if __name__ == '__main__':
     _2k    = Representation(Size(2560, 1440), Bitrate(6144*1024, 320*1024))
     _4k    = Representation(Size(3840, 2160), Bitrate(17408*1024, 320*1024))
 
-    hls(_720p)
+    hls(_360p, _720p)
