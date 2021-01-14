@@ -2,7 +2,6 @@
 const video = document.getElementById('video');
 const videoControls = document.getElementById('video-controls');
 const videoContainer = document.getElementById('video-container');
-const today = new Date();
 
 const videoWorks = !!document.createElement('video').canPlayType;
 if (videoWorks) {
@@ -67,7 +66,7 @@ function updateVideoInfo() {
     const time = formatTime(videoDuration);
     duration.innerText = `${time.minutes}:${time.seconds}`;
     duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
-    video.playbackRate = 0.87;
+    video.playbackRate = 0.88;
 }
 video.addEventListener('loadedmetadata', updateVideoInfo);
 // Progress bar END
@@ -91,7 +90,6 @@ function updateEverything() {
 }
 
 setInterval(updateEverything, 500);
-// video.addEventListener('timeupdate', updateEverything);
 // Update function END
 
 const seekTooltip = document.getElementById('seek-tooltip');
@@ -189,6 +187,7 @@ function deselect() {
     xmlHttp.onload = function () {
         var logBox = document.getElementById('log-container');
         var node = document.createElement('div');
+        var today = new Date();
         node.innerHTML = `Deselect @ ${today.timeNow()}`;
         node.setAttribute('class', 'log-elem')
         logBox.insertBefore(node, logBox.firstChild);
@@ -214,6 +213,7 @@ function getClickCoordinate(event) {
     xmlHttp.onload = function () {
         var logBox = document.getElementById('log-container');
         var node = document.createElement('div');
+        var today = new Date();
         node.innerHTML = `Select #${JSON.parse(xmlHttp.responseText).target} @ ${today.timeNow()}`;
         node.setAttribute('class', 'log-elem')
         logBox.insertBefore(node, logBox.firstChild);
