@@ -87,14 +87,13 @@ def data():
     coor = request.args.get('coor')
     if coor == 'deselect':
         trk_id = None
-        print(f'Deselect')
+        logging.debug('Deselect')
     else:
         x, y, h, w = coor.split(',')
         x, y = rescale(x, y, h, w)
         trk_id = select_track(x, y, target_cid, tracks)
-        print(f'Click @ {x}/{width}, {y}/{height}')
-        print(f'target: {trk_id} @ #frame {tracker.frame_count}')
-    return json.dumps({'success': True}), 200, {'ContentType':'application/json'} 
+        logging.debug(f'Click @ ({x}/{width}, {y}/{height}) @ frame {tracker.frame_count}, target: #{trk_id}')
+    return json.dumps({'success': True, 'target': trk_id}), 200, {'ContentType':'application/json'} 
 
 
 @app.route('/shutdown', methods=['GET'])
@@ -140,7 +139,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     logging.basicConfig(
-        format='%(levelname)s, %(asctime)s, %(funcName)s, %(message)s',
+        format='%(levelname)s, %(asctime)s, %(message)s',
         datefmt='%Y-%m-%d %H:%M:%S',
         level=logging.DEBUG)
 

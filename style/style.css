@@ -29,10 +29,28 @@ body {
   align-items: center;
 }
 
+.log-container {
+  width: 200px;
+  height: 50%;
+  border-radius: 4px;
+  margin: 0 auto 0 5px;
+  background-color: rgb(231, 231, 231);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: auto;
+}
+
+.log-elem {
+  font-family: "YouTube Noto", Roboto, Arial, Helvetica, sans-serif;
+  padding: 3px 3px 3px 6px;
+}
+
 .video-container {
   width: 750px;
   border-radius: 4px;
-  margin: 0 auto;
+  margin: 0 5px 0 auto;
   position: relative;
   display: flex;
   flex-direction: column;

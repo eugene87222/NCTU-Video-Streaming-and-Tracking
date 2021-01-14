@@ -2,6 +2,7 @@
 const video = document.getElementById('video');
 const videoControls = document.getElementById('video-controls');
 const videoContainer = document.getElementById('video-container');
+const today = new Date();
 
 const videoWorks = !!document.createElement('video').canPlayType;
 if (videoWorks) {
@@ -14,7 +15,8 @@ const playButton = document.getElementById('play');
 function togglePlay() {
     if (video.paused || video.ended) {
         video.play();
-    } else {
+    }
+    else {
         video.pause();
     }
 }
@@ -23,10 +25,10 @@ playButton.addEventListener('click', togglePlay);
 const playbackIcons = document.querySelectorAll('.playback-icons use');
 function updatePlayButton() {
     playbackIcons.forEach(icon => icon.classList.toggle('hidden'));
-
     if (video.paused) {
         playButton.setAttribute('data-title', 'Play')
-    } else {
+    }
+    else {
         playButton.setAttribute('data-title', 'Pause')
     }
 }
@@ -65,7 +67,7 @@ function updateVideoInfo() {
     const time = formatTime(videoDuration);
     duration.innerText = `${time.minutes}:${time.seconds}`;
     duration.setAttribute('datetime', `${time.minutes}m ${time.seconds}s`);
-    video.playbackRate = 0.85;
+    video.playbackRate = 0.87;
 }
 video.addEventListener('loadedmetadata', updateVideoInfo);
 // Progress bar END
@@ -137,9 +139,11 @@ function updateVolumeIcon() {
     if (video.muted || video.volume === 0) {
         volumeMute.classList.remove('hidden');
         volumeButton.setAttribute('data-title', 'Unmute')
-    } else if (video.volume > 0 && video.volume <= 0.5) {
+    }
+    else if (video.volume > 0 && video.volume <= 0.5) {
         volumeLow.classList.remove('hidden');
-    } else {
+    }
+    else {
         volumeHigh.classList.remove('hidden');
     }
 }
@@ -150,7 +154,8 @@ function toggleMute() {
     if (video.muted) {
         volume.setAttribute('data-volume', volume.value);
         volume.value = 0;
-    } else {
+    }
+    else {
         volume.value = volume.dataset.volume;
     }
 }
@@ -164,17 +169,13 @@ $.getJSON('config.json', function (json) {
     flask_port = json.flask_port;
 });
 
-function sendRequest(method, url) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open(method, url);
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
-}
 
 // Shutdown START
 const shutdownButton = document.getElementById('shutdown-button');
 function shutdown() {
-    sendRequest('GET', `http://${server_ip}:${flask_port}/shutdown`);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open('GET', `http://${server_ip}:${flask_port}/shutdown`, true);
+    xmlHttp.send(null);
 }
 shutdownButton.addEventListener('click', shutdown);
 // Shutdown END
@@ -182,7 +183,16 @@ shutdownButton.addEventListener('click', shutdown);
 // Deselect START
 const deselectButton = document.getElementById('deselect-button');
 function deselect() {
-    sendRequest('GET', `http://${server_ip}:${flask_port}/data?coor=deselect`);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open('GET', `http://${server_ip}:${flask_port}/data?coor=deselect`, true);
+    xmlHttp.send(null);
+    xmlHttp.onload = function () {
+        var logBox = document.getElementById('log-container');
+        var node = document.createElement('div');
+        node.innerHTML = `Deselect @ ${today.timeNow()}`;
+        node.setAttribute('class', 'log-elem')
+        logBox.insertBefore(node, logBox.firstChild);
+    }
 }
 deselectButton.addEventListener('click', deselect);
 // Deselect END
@@ -191,12 +201,29 @@ deselectButton.addEventListener('click', deselect);
 function getClickCoordinate(event) {
     var x = event.clientX + window.pageXOffset - videoContainer.offsetLeft;
     var y = event.clientY + window.pageYOffset - videoContainer.offsetTop;
-    var height = video.offsetHeight;
-    var width = video.offsetWidth;
     x = x < 0 ? 0 : x;
     y = y < 0 ? 0 : y;
-    sendRequest('GET', `http://${server_ip}:${flask_port}/data?coor=`+x+','+y+','+height+','+width);
+
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open(
+        'GET',
+        `http://${server_ip}:${flask_port}/data?coor=` + x + ',' + y + ',' + video.offsetHeight + ',' + video.offsetWidth,
+        true
+    );
+    xmlHttp.send(null);
+    xmlHttp.onload = function () {
+        var logBox = document.getElementById('log-container');
+        var node = document.createElement('div');
+        node.innerHTML = `Select #${JSON.parse(xmlHttp.responseText).target} @ ${today.timeNow()}`;
+        node.setAttribute('class', 'log-elem')
+        logBox.insertBefore(node, logBox.firstChild);
+    }
+
     event.preventDefault();
 }
 video.addEventListener('click', getClickCoordinate);
 // Click event END
+
+Date.prototype.timeNow = function () {
+    return ((this.getHours() < 10) ? '0' : '') + this.getHours() + ':' + ((this.getMinutes() < 10) ? '0' : '') + this.getMinutes() + ':' + ((this.getSeconds() < 10) ? '0' : '') + this.getSeconds();
+}
